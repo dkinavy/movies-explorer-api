@@ -8,7 +8,7 @@ const NotFoundError = require("../errors/NotFoundError");
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.createUser = (req, res, next) => {
-  console.log(req.body);
+  //console.log(req.body);
   const { email, password, name } = req.body;
   bcrypt
     .hash(password, 10)

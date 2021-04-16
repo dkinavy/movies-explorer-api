@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const users = require("./routes/users.js");
+const movieRouter = require("./routes/movies.js");
 const { login, createUser } = require("./controllers/users");
 const auth = require("./middlewares/auth");
 
@@ -27,7 +28,7 @@ mongoose.connect("mongodb://localhost:27017/bitfilmsdb", {
   useUnifiedTopology: true,
 });
 
-//app.use("*", cors(corsOptions));
+app.use("*", cors(corsOptions));
 
 app.use(requestLogger); // подключаем логгер запросов
 
@@ -56,7 +57,7 @@ app.post(
 // Все что ниже потребует авторизацию
 app.use(auth);
 app.use("/", users);
-//app.use("/", movies);
+app.use("/", movieRouter);
 
 app.use(errorLogger); // подключаем логгер ошибок
 
