@@ -94,7 +94,7 @@ module.exports.login = (req, res, next) => {
           expiresIn: "7d",
         }
       );
-      res.send({ token, data: user });
+      res.send({ token });
     })
     .catch((err) => {
       next(err);

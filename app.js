@@ -6,13 +6,14 @@ const users = require("./routes/users.js");
 const movieRouter = require("./routes/movies.js");
 const { login, createUser } = require("./controllers/users");
 const auth = require("./middlewares/auth");
-
+const helmet = require("helmet");
+const limiter = require("./middlewares/rateLimit");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { errors, celebrate, Joi, isCelebrateError } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const app = express();
-const { PORT = 3001 } = process.env;
+const { PORT = 3001, MONGO_ADRESS, NODE_ENV } = process.env;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const corsOptions = {
@@ -21,16 +22,23 @@ const corsOptions = {
   credentials: true,
 };
 
-mongoose.connect("mongodb://localhost:27017/bitfilmsdb", {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  NODE_ENV === "production"
+    ? MONGO_ADRESS
+    : "mongodb://localhost:27017/bitfilmsdb",
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  }
+);
 
 app.use("*", cors(corsOptions));
 
 app.use(requestLogger); // подключаем логгер запросов
+app.use(helmet());
+app.use(limiter);
 
 app.post(
   "/signin",

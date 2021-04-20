@@ -2,6 +2,7 @@ const Movie = require("../models/movie");
 
 const BadRequestError = require("../errors/BadRequestError");
 const NotFoundError = require("../errors/NotFoundError");
+const ForbiddenError = require("../errors/ForbiddenError");
 
 module.exports.getMovies = (req, res, next) => {
   //console.log(req.user);
@@ -51,13 +52,13 @@ module.exports.createMovie = (req, res, next) => {
     });
 };
 module.exports.deleteMovie = (req, res, next) => {
-  //console.log(req.user);
   Movie.findByIdAndRemove(req.params._id)
     .then((movie) => {
       if (!movie) {
         const r = new NotFoundError("Нет фильма с таким идентификатором");
         next(r);
       } else if (movie.owner.toString() !== req.user._id) {
+        //Есть проверка на то что удалять чужие фильмы нельзя
         const r = new ForbiddenError("Нельзя удалять чужие фильмы");
         next(r);
       } else {
