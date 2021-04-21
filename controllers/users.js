@@ -58,10 +58,10 @@ module.exports.createUser = (req, res, next) => {
 // };
 
 module.exports.updateUser = (req, res, next) => {
-  const { name, about } = req.body;
+  const { name, email } = req.body;
   const owner = req.user._id;
 
-  User.findByIdAndUpdate(owner, { about, name }, { new: true })
+  User.findByIdAndUpdate(owner, { email, name }, { new: true })
     .then((user) => {
       if (!user) {
         const error = new NotFoundError("Не найден пользователь с таким ID");
@@ -76,6 +76,9 @@ module.exports.updateUser = (req, res, next) => {
         next(error);
       } else if (err.name === "CastError") {
         const error = new BadRequestError("Неверный формат ID");
+        next(error);
+      } else if (err.name === "MongoError" || err.code === 11000) {
+        const error = new ConflictError("Такой пользователь уже есть");
         next(error);
       }
       next(err);
