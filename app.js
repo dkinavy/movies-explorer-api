@@ -13,7 +13,7 @@ const bodyParser = require("body-parser");
 const { errors, celebrate, Joi, isCelebrateError } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const app = express();
-const { PORT = 3001, MONGO_ADRESS, NODE_ENV } = process.env;
+const { PORT = 3003, MONGO_ADRESS, NODE_ENV } = process.env;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const corsOptions = {
