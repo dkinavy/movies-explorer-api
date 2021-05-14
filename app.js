@@ -37,7 +37,7 @@ mongoose.connect(
   }
 );
 
-app.use(cors({ origin: true }));
+app.use("*", cors(corsOptions));
 
 app.use(requestLogger); // подключаем логгер запросов
 app.use(helmet());
