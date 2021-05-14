@@ -14,8 +14,7 @@ const { errors, celebrate, Joi, isCelebrateError } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const app = express();
 const { PORT = 3003, MONGO_ADRESS, NODE_ENV } = process.env;
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+
 const corsOptions = {
   origin: [
     "http://localhost:3000",
@@ -24,7 +23,8 @@ const corsOptions = {
   ],
   credentials: true,
 };
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.connect(
   NODE_ENV === "production"
     ? MONGO_ADRESS
