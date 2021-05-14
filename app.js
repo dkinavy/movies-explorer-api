@@ -17,8 +17,11 @@ const { PORT = 3001, MONGO_ADRESS, NODE_ENV } = process.env;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const corsOptions = {
-  // origin: "http://mestoforday.nomoredomains.icu",
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "http://api.movie-for-day.nomoredomains.club",
+    "http://movie-for-day.nomoredomains.club",
+  ],
   credentials: true,
 };
 
@@ -34,7 +37,7 @@ mongoose.connect(
   }
 );
 
-app.use("*", cors(corsOptions));
+app.use(cors());
 
 app.use(requestLogger); // подключаем логгер запросов
 app.use(helmet());
